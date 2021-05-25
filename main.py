@@ -9,7 +9,8 @@ checker_thread = None
 
 
 if __name__ == '__main__':
-    db_connection = MockDatabaseConnection()
+    # db_connection = MockDatabaseConnection()
+    db_connection = MySqlDatabaseConnection()
     check_time = 60 * 1
 
     configuration = Configuration()

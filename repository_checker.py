@@ -29,6 +29,8 @@ def check_repository_for_new_files(db_connection, directory_path, data_extractor
                 data = data_extractor.extract_data_from_file(file_path)
                 if data:
                     db_connection.add_data_to_db(data, file_name)
+                else:
+                    db_connection.add_failed_file_to_db(file_name)
 
         if is_one_time:
             return
