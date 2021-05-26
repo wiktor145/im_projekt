@@ -17,7 +17,7 @@ class MySqlDatabaseConnection:
         return filename in self.processed_files
 
     def add_data_to_db(self, data, filename):
-        self.add_to_file_table(filename, datetime.now().date(), 1)
+        self.add_to_file_table(filename, datetime.now().date(), 1, str(data))
         self.processed_files.add(filename)
 
     def add_failed_file_to_db(self, filename):
@@ -28,14 +28,14 @@ class MySqlDatabaseConnection:
         mycursor.execute("SELECT file_name FROM files")
         myresult = mycursor.fetchall()
         for x in myresult:
-            self.processed_files.add(str(x))
+            self.processed_files.add(str(x[0]))
 
         mycursor.close()
 
-    def add_to_file_table(self, filename, processed_date, was_successful):
+    def add_to_file_table(self, filename, processed_date, was_successful, content=None):
         mycursor = self.db.cursor()
-        sql = "INSERT INTO files (file_name, processed_date, was_successful) VALUES (%s, %s, %s)"
-        val = (filename, processed_date, was_successful)
+        sql = "INSERT INTO files (file_name, processed_date, was_successful, content) VALUES (%s, %s, %s, %s)"
+        val = (filename, processed_date, was_successful, content)
         mycursor.execute(sql, val)
         self.db.commit()
         mycursor.close()
@@ -53,6 +53,7 @@ class MockDatabaseConnection:
 
     def add_data_to_db(self, data, filename):
         self.processed_files.add(filename)
+        print(data)
         self.db.append(data)
 
     def add_failed_file_to_db(self, filename):

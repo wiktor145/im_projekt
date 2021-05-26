@@ -32,7 +32,7 @@ class MetadataExtractor:
                 ret[field] = ds[field]
 
             print(ret)
-            return ret
+            return str(ds)
         except Exception as e:
             print(e)
             return None

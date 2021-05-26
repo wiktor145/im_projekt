@@ -9,5 +9,6 @@ create table files(
    file_name VARCHAR(200) NOT NULL,
    processed_date DATE,
    was_successful INT NOT NULL,
+   content VARCHAR(10000),
    PRIMARY KEY ( file_id )
 );
