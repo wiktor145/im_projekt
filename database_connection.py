@@ -53,7 +53,6 @@ class MockDatabaseConnection:
 
     def add_data_to_db(self, data, filename):
         self.processed_files.add(filename)
-        print(data)
         self.db.append(data)
 
     def add_failed_file_to_db(self, filename):

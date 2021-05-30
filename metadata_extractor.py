@@ -3,19 +3,6 @@ import os
 import pydicom as pydicom
 
 
-class Configuration:
-    fields_to_extract = [
-        "PatientName",
-        "Modality",
-        "StudyID",
-        "StudyTime",
-        "PatientID",
-        "RadiationSetting",
-        "RadiationMode",
-        "SeriesNumber"
-    ]
-
-
 class MetadataExtractor:
 
     def __init__(self, configuration):
@@ -29,10 +16,17 @@ class MetadataExtractor:
             ret = {}
 
             for field in self.configuration.fields_to_extract:
-                ret[field] = ds[field]
-
+                if field in ds.dir():
+                    # print(field, ds.dir())
+                    # print(ds[field])
+                    ret[field] = ds[field]
+            # print(file_name)
+            # print(ds.dir())
+            # print(ds['RadiationMode'])
             print(ret)
-            return str(ds)
+            return str(ret)
         except Exception as e:
+            print("ERROR!")
             print(e)
+            # print(ds)
             return None
