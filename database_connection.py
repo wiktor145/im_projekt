@@ -1,5 +1,8 @@
 import mysql.connector
 from datetime import date, datetime, timedelta
+import time
+
+time.strftime('%Y-%m-%d %H:%M:%S')
 
 
 class MySqlDatabaseConnection:
@@ -17,11 +20,11 @@ class MySqlDatabaseConnection:
         return filename in self.processed_files
 
     def add_data_to_db(self, data, filename):
-        self.add_to_file_table(filename, datetime.now().date(), 1, str(data))
+        self.add_to_file_table(filename, datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 1, str(data))
         self.processed_files.add(filename)
 
     def add_failed_file_to_db(self, filename):
-        self.add_to_file_table(filename, datetime.now().date(), 0)
+        self.add_to_file_table(filename, datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 0)
 
     def get_processed_files_from_db(self):
         mycursor = self.db.cursor()
@@ -40,6 +43,21 @@ class MySqlDatabaseConnection:
         self.db.commit()
         mycursor.close()
 
+    def get_processed_files_list(self):
+        self.get_processed_files_from_db()
+        return list(self.processed_files)
+
+    def get_processed_files_with_dates(self):
+        mycursor = self.db.cursor()
+        mycursor.execute("SELECT file_name, processed_date, content FROM files order by processed_date desc")
+        myresult = mycursor.fetchall()
+        result = []
+        for x in myresult:
+            result.append((str(x[0]), str(x[1]), str(x[2])))
+
+        mycursor.close()
+        return result
+
 
 class MockDatabaseConnection:
 
@@ -57,3 +75,14 @@ class MockDatabaseConnection:
 
     def add_failed_file_to_db(self, filename):
         self.processed_files.add(filename)
+
+    def get_processed_files_list(self):
+        return list(self.processed_files)
+
+    def get_processed_files_with_dates(self):
+        result = []
+        for i in range(30):
+            result.append(("File_{}".format(i), str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')),
+                           self.db[0] if len(self.db) > 0 else "tes test"))
+
+        return result

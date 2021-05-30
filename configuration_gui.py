@@ -18,9 +18,11 @@ def get_configuration_by_gui():
         canvas.configure(scrollregion=canvas.bbox("all"))
 
     root = tk.Tk()
-    canvas = tk.Canvas(root, borderwidth=0)
+    root_frame = Frame(root)
+    root_frame.pack()
+    canvas = tk.Canvas(root_frame, borderwidth=0)
     frame = tk.Frame(canvas)
-    vsb = tk.Scrollbar(root, orient="vertical", command=canvas.yview)
+    vsb = tk.Scrollbar(root_frame, orient="vertical", command=canvas.yview)
     canvas.configure(yscrollcommand=vsb.set)
 
     vsb.pack(side="right", fill="y")
@@ -34,7 +36,8 @@ def get_configuration_by_gui():
     list_of_tags = set()
 
     button_values = populate(frame, conf)
-    frame1 = tk.Frame(canvas)
+    frame1 = tk.Frame(root_frame)
+    frame1.pack(side="bottom")
 
     def save_list_of_tags(button_values):
         for a, b in button_values:
@@ -46,7 +49,6 @@ def get_configuration_by_gui():
                     list_of_tags.remove(a)
 
     save_button = Button(frame1, text="Save", command=lambda: save_list_of_tags(button_values)).pack()
-    canvas.create_window((4, 4), window=frame1, anchor="nw")
 
     root.title("Choose DICOM tags to extract")
     root.mainloop()

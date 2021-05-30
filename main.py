@@ -1,6 +1,7 @@
 import threading
 import time
 
+from client_gui import show_client_gui
 from configuration import Configuration
 from repository_checker import check_repository_for_new_files
 from database_connection import *
@@ -24,6 +25,11 @@ if __name__ == '__main__':
     checker_thread = threading.Thread(target=check_repository_for_new_files,
                                       args=(db_connection, dir_path, extractor, check_time))
     checker_thread.start()
+
+    client_db = MockDatabaseConnection()
+    show_client_gui(db_connection)
+    checker_thread.join(70)
+    exit(0)
 
     try:
         while True:
