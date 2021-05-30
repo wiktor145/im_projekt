@@ -10,6 +10,7 @@ create table files(
    processed_date DATETIME,
    was_successful INT NOT NULL,
    content VARCHAR(10000),
+   comment VARCHAR(5000),
    PRIMARY KEY ( file_id )
 );
 

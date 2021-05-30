@@ -49,14 +49,22 @@ class MySqlDatabaseConnection:
 
     def get_processed_files_with_dates(self):
         mycursor = self.db.cursor()
-        mycursor.execute("SELECT file_name, processed_date, content FROM files order by processed_date desc")
+        mycursor.execute("SELECT file_name, processed_date, content, comment FROM files order by processed_date desc")
         myresult = mycursor.fetchall()
         result = []
         for x in myresult:
-            result.append((str(x[0]), str(x[1]), str(x[2])))
+            result.append((str(x[0]), str(x[1]), str(x[2]), str(x[3])))
 
         mycursor.close()
         return result
+
+    def save_comment_for_file(self, filename, comment):
+        mycursor = self.db.cursor()
+        sql = "update files set comment = %s where file_name = %s"
+        val = (comment, filename)
+        mycursor.execute(sql, val)
+        self.db.commit()
+        mycursor.close()
 
 
 class MockDatabaseConnection:
@@ -83,6 +91,9 @@ class MockDatabaseConnection:
         result = []
         for i in range(30):
             result.append(("File_{}".format(i), str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')),
-                           self.db[0] if len(self.db) > 0 else "tes test"))
+                           self.db[0] if len(self.db) > 0 else "tes test", "comment comment comment"))
 
         return result
+
+    def save_comment_for_file(self, filename, comment):
+        print(filename, comment)

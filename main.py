@@ -28,7 +28,7 @@ if __name__ == '__main__':
 
     client_db = MockDatabaseConnection()
     show_client_gui(db_connection)
-    checker_thread.join(70)
+    #checker_thread.join(10)
     exit(0)
 
     try:
