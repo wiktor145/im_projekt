@@ -64,8 +64,9 @@ create table series(
 
 create table images(
     image_id INT NOT NULL AUTO_INCREMENT,
+    -- series_id INT,
     ImageType VARCHAR(200),
     --content BLOB,
-    PRIMARY KEY ( series_id )
+    PRIMARY KEY ( image_id )
 --, FOREIGN KEY (series_id) REFERENCES series(series_id)
 );
