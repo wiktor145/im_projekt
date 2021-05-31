@@ -2,19 +2,20 @@ import tkinter as tk
 from tkinter import *
 
 entries = []
+field_widths = [60,20]
 
 def show_client_gui(db_connection):
     global entries
     root = tk.Tk()
     root.geometry("800x500")
     root_frame = Frame(root)
-    root_frame.pack()
+    root_frame.pack(side="left", fill="both", expand=True)
     canvas = tk.Canvas(root_frame, borderwidth=0)
     frame = tk.Frame(canvas)
     vsb = tk.Scrollbar(root_frame, orient="vertical", command=canvas.yview)
     canvas.configure(yscrollcommand=vsb.set)
 
-    vsb.pack(side="right", fill="both", expand=True)
+    vsb.pack(side="right", fill="both")
     canvas.pack(side="left", fill="both", expand=True)
     canvas.create_window(0, 0, window=frame, anchor="nw")
 
@@ -24,7 +25,7 @@ def show_client_gui(db_connection):
     i = 0
     for entry in entries:
         for j in range(len(entry) - 2):
-            e = Entry(frame, width=20, fg='blue')
+            e = Entry(frame, width=field_widths[j], fg='blue')
             e.grid(row=i, column=j)
             e.insert(END, entry[j])
         btn = Button(frame, text="Show Full", command=lambda i=i: show_full_text(i))
@@ -43,7 +44,7 @@ def show_client_gui(db_connection):
         i = 0
         for entry in entries:
             for j in range(len(entry) - 2):
-                e = Entry(frame, width=20, fg='blue')
+                e = Entry(frame, width=field_widths[j], fg='blue')
                 e.grid(row=i, column=j)
                 e.insert(END, entry[j])
 
