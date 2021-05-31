@@ -14,6 +14,15 @@ create table files(
    PRIMARY KEY ( file_id )
 );
 
+create table files_fields(
+    file_id INT,
+    keyword VARCHAR(200),
+    value VARCHAR(1000),
+    FOREIGN KEY (file_id) REFERENCES files(file_id)
+);
+
+
+
 create table patients(
     patient_id INT NOT NULL AUTO_INCREMENT,
     PatientAge VARCHAR(200),

@@ -20,7 +20,7 @@ class MySqlDatabaseConnection:
         return filename in self.processed_files
 
     def add_data_to_db(self, data, filename):
-        self.add_to_file_table(filename, datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 1, str(data))
+        self.add_to_file_table(filename, datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 1, data)
         self.processed_files.add(filename)
 
     def add_failed_file_to_db(self, filename):
@@ -38,8 +38,15 @@ class MySqlDatabaseConnection:
     def add_to_file_table(self, filename, processed_date, was_successful, content=None):
         mycursor = self.db.cursor()
         sql = "INSERT INTO files (file_name, processed_date, was_successful, content) VALUES (%s, %s, %s, %s)"
-        val = (filename, processed_date, was_successful, content)
+        val = (filename, processed_date, was_successful, str(content))
         mycursor.execute(sql, val)
+        id = mycursor.lastrowid
+        if content:
+            for key in content:
+                sql = "INSERT INTO files_fields (file_id, keyword, value) VALUES (%s, %s, %s)"
+                val = (str(id), str(key), str(content[key]))
+                mycursor.execute(sql, val)
+
         self.db.commit()
         mycursor.close()
 
@@ -65,6 +72,18 @@ class MySqlDatabaseConnection:
         mycursor.execute(sql, val)
         self.db.commit()
         mycursor.close()
+
+    def get_values_list_for_file(self, filename):
+        mycursor = self.db.cursor()
+        mycursor.execute(
+            "SELECT keyword, value FROM files_fields where file_Id = (select file_Id from files where file_name = %s) order by keyword",
+            (filename,))
+        myresult = mycursor.fetchall()
+        result = []
+        for x in myresult:
+            result.append((str(x[0]), str(x[1])))
+        mycursor.close()
+        return result
 
 
 class MockDatabaseConnection:
@@ -97,3 +116,6 @@ class MockDatabaseConnection:
 
     def save_comment_for_file(self, filename, comment):
         print(filename, comment)
+
+    def get_values_list_for_file(self, filename):
+        return [('key1', 'value1'), ('key2', 'value2')]

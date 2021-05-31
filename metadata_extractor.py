@@ -24,7 +24,7 @@ class MetadataExtractor:
             # print(ds.dir())
             # print(ds['RadiationMode'])
             print(ret)
-            return str(ret)
+            return ret
         except Exception as e:
             print("ERROR!")
             print(e)
