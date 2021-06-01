@@ -21,7 +21,8 @@ create table files_fields(
     FOREIGN KEY (file_id) REFERENCES files(file_id)
 );
 
-
+--todo zrobic tabete pacjenci - pliki
+--jeden plik dicom to jedno zdjecie jednej serii jednego badania jednego pacjeta
 
 create table patients(
     patient_id INT NOT NULL AUTO_INCREMENT,
@@ -70,3 +71,13 @@ create table images(
     PRIMARY KEY ( image_id )
 --, FOREIGN KEY (series_id) REFERENCES series(series_id)
 );
+
+
+--pixel data to jest obraz
+--pixel data zapisac tylko np ilosc bajtow
+
+-- study wyciagac z Study Instance UID
+
+--series  z Series Instance UID
+
+--patient z Patient ID

@@ -19,7 +19,10 @@ class MetadataExtractor:
                 if field in ds.dir():
                     # print(field, ds.dir())
                     # print(ds[field])
-                    ret[field] = ds[field]
+                    try:
+                        ret[field] = ds[field]
+                    except:
+                        print("Error during getting field", field, "in file", file_name)
             # print(file_name)
             # print(ds.dir())
             # print(ds['RadiationMode'])
