@@ -2,7 +2,8 @@ import tkinter as tk
 from tkinter import *
 
 entries = []
-field_widths = [60,20]
+field_widths = [60, 20]
+
 
 def show_client_gui(db_connection):
     global entries
@@ -104,5 +105,5 @@ def show_client_gui(db_connection):
 
     save_button = Button(frame1, text="Refresh", command=lambda: refresh(frame, db_connection)).pack()
 
-    root.title("Files")
+    root.title("Dicom Repository")
     root.mainloop()

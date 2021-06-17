@@ -1,12 +1,7 @@
 import threading
-import time
 
-from client_gui import show_client_gui
-from configuration import Configuration
-from repository_checker import check_repository_for_new_files
-from database_connection import *
-from metadata_extractor import *
-from configuration_gui import get_configuration_by_gui
+from client_gui.client_gui import show_client_gui
+from repository_checker.repository_checker import *
 
 checker_thread = None
 
@@ -15,9 +10,10 @@ if __name__ == '__main__':
     # db_connection = MySqlDatabaseConnection()
     check_time = 60 * 1
 
-    list_of_tags = get_configuration_by_gui()
+    f = open("configuration.json", "r")
+    configuration = json.load(f)
+    f.close()
 
-    configuration = Configuration(list_of_tags)
     extractor = MetadataExtractor(configuration)
 
     dir_path = "./data/"
@@ -28,7 +24,6 @@ if __name__ == '__main__':
 
     client_db = MockDatabaseConnection()
     show_client_gui(db_connection)
-    #checker_thread.join(10)
     exit(0)
 
     try:

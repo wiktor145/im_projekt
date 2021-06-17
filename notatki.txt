@@ -1,0 +1,22 @@
+
+--todo zrobic tabete pacjenci - pliki
+--jeden plik dicom to jedno zdjecie jednej serii jednego badania jednego pacjeta
+
+--pixel data to jest obraz
+--pixel data zapisac tylko np ilosc bajtow
+
+-- study wyciagac z Study Instance UID
+
+--series  z Series Instance UID
+
+--patient z Patient ID
+
+create table patients(
+    patient_id INT NOT NULL AUTO_INCREMENT,
+    PatientID VARCHAR(200) UNIQUE, --later probably also NOT NULL
+    PatientAge VARCHAR(200),
+    PatientBirthDate VARCHAR(200),
+    PatientName VARCHAR(200),
+    PatientSex VARCHAR(200),
+    PRIMARY KEY ( patient_id )
+);

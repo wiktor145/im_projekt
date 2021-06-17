@@ -1,5 +1,5 @@
-from tkinter import *
-from configuration import Configuration
+import json
+from other_classes.configuration import Configuration
 from tkinter.tix import *
 import tkinter as tk
 
@@ -53,5 +53,17 @@ def get_configuration_by_gui():
     root.title("Choose DICOM tags to extract")
     root.mainloop()
 
-    print(list_of_tags)
-    return list_of_tags
+    conf = Configuration(list(list_of_tags))
+
+    js = json.dumps(conf.__dict__)
+
+    with open("../configuration.json", "w+") as f:
+        f.write(str(js))
+
+
+def configuration_gui():
+    get_configuration_by_gui()
+
+
+if __name__ == '__main__':
+    get_configuration_by_gui()
