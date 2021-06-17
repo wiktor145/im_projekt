@@ -77,7 +77,7 @@ class Toplevel1:
         top.minsize(120, 1)
         top.maxsize(3844, 1061)
         top.resizable(1, 1)
-        top.title("New Toplevel")
+        top.title("Patient Window")
         top.configure(background="#f2f2f2")
 
         self.Label1 = tk.Label(top)
@@ -90,7 +90,7 @@ class Toplevel1:
         self.Label1.configure(text='''Patient''')
 
         self.Label2 = tk.Label(top)
-        self.Label2.place(relx=0.03, rely=0.109, height=27, width=105)
+        self.Label2.place(relx=0.03, rely=0.109, height=27, width=120)
         self.Label2.configure(background="#d9d9d9")
         self.Label2.configure(cursor="fleur")
         self.Label2.configure(disabledforeground="#a3a3a3")
@@ -99,7 +99,7 @@ class Toplevel1:
         self.Label2.configure(text='''patient_id''')
 
         self.Label3 = tk.Label(top)
-        self.Label3.place(relx=0.03, rely=0.182, height=21, width=105)
+        self.Label3.place(relx=0.03, rely=0.182, height=21, width=120)
         self.Label3.configure(background="#d9d9d9")
         self.Label3.configure(cursor="fleur")
         self.Label3.configure(disabledforeground="#a3a3a3")
@@ -108,7 +108,7 @@ class Toplevel1:
         self.Label3.configure(text='''PatientID''')
 
         self.Label4 = tk.Label(top)
-        self.Label4.place(relx=0.03, rely=0.236, height=21, width=104)
+        self.Label4.place(relx=0.03, rely=0.236, height=21, width=120)
         self.Label4.configure(background="#d9d9d9")
         self.Label4.configure(cursor="fleur")
         self.Label4.configure(disabledforeground="#a3a3a3")
@@ -117,7 +117,7 @@ class Toplevel1:
         self.Label4.configure(text='''PatientAge''')
 
         self.Label5 = tk.Label(top)
-        self.Label5.place(relx=0.03, rely=0.291, height=21, width=104)
+        self.Label5.place(relx=0.03, rely=0.291, height=21, width=120)
         self.Label5.configure(background="#d9d9d9")
         self.Label5.configure(disabledforeground="#a3a3a3")
         self.Label5.configure(foreground="#000000")
@@ -125,7 +125,7 @@ class Toplevel1:
         self.Label5.configure(text='''PatientBirthDate''')
 
         self.Label6 = tk.Label(top)
-        self.Label6.place(relx=0.03, rely=0.345, height=21, width=104)
+        self.Label6.place(relx=0.03, rely=0.345, height=21, width=120)
         self.Label6.configure(background="#d9d9d9")
         self.Label6.configure(disabledforeground="#a3a3a3")
         self.Label6.configure(foreground="#000000")
@@ -133,7 +133,7 @@ class Toplevel1:
         self.Label6.configure(text='''PatientName''')
 
         self.Label7 = tk.Label(top)
-        self.Label7.place(relx=0.03, rely=0.4, height=21, width=104)
+        self.Label7.place(relx=0.03, rely=0.4, height=21, width=120)
         self.Label7.configure(background="#d9d9d9")
         self.Label7.configure(cursor="fleur")
         self.Label7.configure(disabledforeground="#a3a3a3")

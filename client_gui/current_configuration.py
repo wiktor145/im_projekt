@@ -75,7 +75,7 @@ class Toplevel1:
         top.minsize(120, 1)
         top.maxsize(3844, 1061)
         top.resizable(1, 1)
-        top.title("New Toplevel")
+        top.title("Current Configuration")
         top.configure(background="#d9d9d9")
 
         self.Label1 = tk.Label(top)

@@ -77,7 +77,7 @@ class Toplevel1:
         top.minsize(120, 1)
         top.maxsize(3844, 1061)
         top.resizable(1, 1)
-        top.title("New Toplevel")
+        top.title("Series Window")
         top.configure(background="#f2f2f2")
 
         self.Label1 = tk.Label(top)
