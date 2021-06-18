@@ -11,6 +11,7 @@ from tkinter import END
 
 import current_configuration
 import patient_window
+import edit_configuration
 
 try:
     import Tkinter as tk
@@ -71,7 +72,12 @@ def open_patient(i):
     patient_window.create_Toplevel1(root, connection, patients_list[i])
 
 
+def open_edit_configuration():
+    edit_configuration.create_Toplevel1(root)
+
 if __name__ == '__main__':
     import dicom_repository
 
     dicom_repository.vp_start_gui()
+
+

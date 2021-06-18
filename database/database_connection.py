@@ -20,6 +20,10 @@ class MySqlDatabaseConnection:
             password="imuserpassword",
             database="imdb"
         )
+
+        c = self.db.cursor()
+        c.execute("""set session transaction isolation level READ COMMITTED""")
+
         self.processed_files = set()
         self.processed_files_cache_time = None
         self.processed_files_cache_lifetime_seconds = 60

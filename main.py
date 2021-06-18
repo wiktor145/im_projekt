@@ -1,6 +1,6 @@
 import threading
 
-from client_gui.client_gui import show_client_gui
+from old.client_gui import show_client_gui
 from repository_checker.repository_checker import *
 
 checker_thread = None

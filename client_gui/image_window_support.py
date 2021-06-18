@@ -37,15 +37,20 @@ def fill_file_fields():
     fields_list = imagefile.file_fields
 
     inner_frame = w.Scrolledwindow1_f
+
+    entries = {}
+
     for i in range(len(fields_list)):
         e = tk.Entry(inner_frame, width=20, fg='blue')
         e.grid(row=i, column=1)
         e.insert(END, fields_list[i].keyword)
 
-        e = tk.Entry(inner_frame, width=45, fg='blue')
-        e.grid(row=i, column=2)
-        e.insert(END, fields_list[i].value)
+        e1 = tk.Entry(inner_frame, width=45, fg='blue')
+        e1.grid(row=i, column=2)
+        e1.insert(END, fields_list[i].value)
+        entries[i] = (e, e1)
 
+    entries[0][0].wait_visibility()
     bbox = inner_frame.bbox()
     w.Scrolledwindow1.configure(scrollregion=bbox)
 
@@ -74,6 +79,8 @@ def destroy_window():
 
 
 def save_comment():
+    #print(imagefile.file.file_id)
+    #print(w.Scrolledtext1.get("1.0", END))
     connection.save_comment_for_file_id(imagefile.file.file_id, w.Scrolledtext1.get("1.0", END))  # ??????????????????
 
 
