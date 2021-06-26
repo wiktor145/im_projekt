@@ -1,12 +1,13 @@
 class File:
     def __init__(self, file_id, file_name, processed_date, was_successful,
-                 content, comment):
+                 content, comment, system_modification_time):
         self.file_id = file_id
         self.file_name = file_name
         self.processed_date = processed_date
         self.was_successful = was_successful
         self.content = content
         self.comment = comment
+        self.system_modification_time = system_modification_time
 
 
 class FileField:
@@ -53,12 +54,13 @@ class Series:
 
 
 class Image:
-    def __init__(self, image_id, series_id, file_id, ImageType, PixelData):
+    def __init__(self, image_id, series_id, file_id, ImageType, PixelData, Modality):
         self.image_id = image_id
         self.series_id = series_id
         self.file_id = file_id
         self.ImageType = ImageType
         self.PixelData = PixelData
+        self.Modality = Modality
 
 
 class ImageFile:

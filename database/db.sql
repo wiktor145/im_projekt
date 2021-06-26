@@ -4,15 +4,20 @@ create database imdb;
 
 use imdb;
 
-create table files(
+create table files (
    file_id INT NOT NULL AUTO_INCREMENT,
    file_name VARCHAR(200) NOT NULL,
    processed_date DATETIME,
+   system_modification_time DATETIME,
    was_successful INT NOT NULL,
    content VARCHAR(10000),
    comment VARCHAR(5000),
    PRIMARY KEY ( file_id )
-);
+); --todo dorzucic pole z data utworzenia systemowego, zeby po tym mozna bylo szukac
+
+-- todo dorzucic do gui glownego plrzysisk do wyczyszczenia calej bazy (danych - truncate)
+--todo z ekranem czy jestes pewien, ale na pewno ????
+--todo zrobic jakis plik koniguracyjny z tym wszstkim
 
 create table files_fields(
     file_id INT,
@@ -64,8 +69,9 @@ create table images(
     file_id INT NOT NULL,
     ImageType VARCHAR(200),
     PixelData VARCHAR(200),
+    Modality VARCHAR(200),
     PRIMARY KEY (image_id),
     FOREIGN KEY (series_id) REFERENCES series(series_id),
     FOREIGN KEY (file_id) REFERENCES files(file_id)
-);
+); -- todo dodac modalnosc
 

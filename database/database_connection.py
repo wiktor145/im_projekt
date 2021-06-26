@@ -36,12 +36,13 @@ class MySqlDatabaseConnection:
 
         return filename in self.processed_files
 
-    def add_data_to_db(self, data, filename):
-        self.add_to_file_table(filename, datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 1, data)
-        self.processed_files.add(filename)
+    # deprecated
+    # def add_data_to_db(self, data, filename):
+    #     self.add_to_file_table(filename, datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 1, data)
+    #     self.processed_files.add(filename)
 
-    def add_failed_file_to_db(self, filename):
-        self.add_to_file_table(filename, datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 0)
+    def add_failed_file_to_db(self, filename, system_modification_time):
+        self.add_to_file_table(filename, datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 0, system_modification_time)
 
     def get_processed_files_from_db(self):
         mycursor = self.db.cursor()
@@ -53,14 +54,15 @@ class MySqlDatabaseConnection:
         mycursor.close()
         self.processed_files_cache_time = datetime.now()
 
-    def add_to_file_table_class(self, parsed_file, filename):
+    def add_to_file_table_class(self, parsed_file, filename, system_modification_time):
         processed_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         was_successful = 1
         mycursor = self.db.cursor()
         try:
 
             # adding to files table
-            file_id = self.add_to_table_files(mycursor, filename, processed_date, was_successful, parsed_file)
+            file_id = self.add_to_table_files(mycursor, filename, processed_date, was_successful, parsed_file,
+                                              system_modification_time)
 
             # adding to files_fileds table
             self.add_to_table_files_fileds(mycursor, file_id, parsed_file)
@@ -86,17 +88,12 @@ class MySqlDatabaseConnection:
         finally:
             mycursor.close()
 
-    def add_to_file_table(self, filename, processed_date, was_successful, content=None):
+    def add_to_file_table(self, filename, processed_date, was_successful, system_modification_time, content=None):
         mycursor = self.db.cursor()
-        sql = "INSERT INTO files (file_name, processed_date, was_successful, content) VALUES (%s, %s, %s, %s)"
-        val = (filename, processed_date, was_successful, str(content))
+        sql = "INSERT INTO files (file_name, processed_date, was_successful, content, system_modification_time) " \
+              + " VALUES (%s, %s, %s, %s, %s)"
+        val = (filename, processed_date, was_successful, str(content), system_modification_time)
         mycursor.execute(sql, val)
-        id = mycursor.lastrowid
-        if content:
-            for key in content:
-                sql = "INSERT INTO files_fields (file_id, keyword, value) VALUES (%s, %s, %s)"
-                val = (str(id), str(key), str(content[key]))
-                mycursor.execute(sql, val)
 
         self.db.commit()
         mycursor.close()
@@ -145,9 +142,12 @@ class MySqlDatabaseConnection:
         mycursor.close()
         return result
 
-    def add_to_table_files(self, mycursor, filename, processed_date, was_successful, parsed_file):
-        sql = "INSERT INTO files (file_name, processed_date, was_successful, content) VALUES (%s, %s, %s, %s)"
-        val = (filename, processed_date, was_successful, str(parsed_file.extracted_fields_dict))
+    def add_to_table_files(self, mycursor, filename, processed_date, was_successful, parsed_file,
+                           system_modification_time):
+        sql = "INSERT INTO files (file_name, processed_date, was_successful, content, system_modification_time) " \
+              + "VALUES (%s, %s, %s, %s, %s)"
+        val = (
+            filename, processed_date, was_successful, str(parsed_file.extracted_fields_dict), system_modification_time)
         mycursor.execute(sql, val)
         return mycursor.lastrowid
 
@@ -222,8 +222,9 @@ class MySqlDatabaseConnection:
     def add_to_table_images(self, mycursor, series_id, file_id, parsed_file):
         dc = parsed_file.image_fields_dict
 
-        sql = "INSERT INTO images (series_id, file_id, ImageType, PixelData) VALUES (%s, %s, %s, %s)"
-        val = (str(series_id), str(file_id), str(dc.get('ImageType', '')), str(dc.get("PixelData", '')))
+        sql = "INSERT INTO images (series_id, file_id, ImageType, PixelData, Modality) VALUES (%s, %s, %s, %s, %s)"
+        val = (str(series_id), str(file_id), str(dc.get('ImageType', '')), str(dc.get("PixelData", '')),
+               str(dc.get("Modality", '')))
         mycursor.execute(sql, val)
         return mycursor.lastrowid
 
@@ -273,14 +274,14 @@ class MySqlDatabaseConnection:
     def get_images_for_series(self, series):
         mycursor = self.db.cursor()
         mycursor.execute(
-            "SELECT image_id, series_id, file_id, ImageType, PixelData " + \
+            "SELECT image_id, series_id, file_id, ImageType, PixelData, Modality " + \
             "FROM images where series_id = %s order by image_id desc",
             (series.series_id,))
         myresult = mycursor.fetchall()
         images_list = []
         for x in myresult:
             images_list.append(
-                Image(str(x[0]), str(x[1]), str(x[2]), str(x[3]), str(x[4])))
+                Image(str(x[0]), str(x[1]), str(x[2]), str(x[3]), str(x[4]), str(x[5])))
 
         mycursor.close()
         return images_list
@@ -288,13 +289,13 @@ class MySqlDatabaseConnection:
     def get_file_by_file_id(self, file_id):
         mycursor = self.db.cursor()
         mycursor.execute(
-            "SELECT file_id, file_name, processed_date, was_successful, content, comment " + \
+            "SELECT file_id, file_name, processed_date, was_successful, content, comment, system_modification_time " + \
             "FROM files where file_id = %s",
             (file_id,))
         myresult = mycursor.fetchall()
         file = None
         for x in myresult:
-            file = File(str(x[0]), str(x[1]), str(x[2]), str(x[3]), str(x[4]), str(x[5]))
+            file = File(str(x[0]), str(x[1]), str(x[2]), str(x[3]), str(x[4]), str(x[5]), str(x[6]))
 
         mycursor.close()
         return file
@@ -325,6 +326,7 @@ class MySqlDatabaseConnection:
         return imagefiles
 
 
+# deprecated
 class MockDatabaseConnection:
 
     def __init__(self):

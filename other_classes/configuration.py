@@ -11,7 +11,7 @@ class Configuration:
         self.series_fields = ['SeriesDate', 'SeriesDescription', 'SeriesInstanceUID',
                               'SeriesNumber', 'SeriesTime']
 
-        self.image_fields = ['ImageType', 'PixelData']
+        self.image_fields = ['ImageType', 'PixelData', 'Modality']
 
         self.fields_to_extract = [
             "PatientName",

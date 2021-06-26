@@ -17,32 +17,48 @@ def signal_handler(sig, frame):
 
 def check_repository_for_new_files(db_connection, directory_path, data_extractor, check_time, is_one_time=False,
                                    with_last_file_limit=False):
-    last_file = None
-    last_file_saved = False
+    last_file_mtime = None
 
     while True:
         list_of_files = filter(os.path.isfile,
                                glob.glob(directory_path + '*'))
-        list_of_files = sorted(list_of_files,
-                               key=os.path.getmtime)
-        last_file_saved = False
-        for file_path in list_of_files:
+
+        files_with_dates = [(x, os.path.getmtime(x)) for x in list_of_files]
+
+        files_with_dates.sort(key=lambda x: x[1], reverse=True)
+
+        # list_of_files = sorted(list_of_files,
+        #                        key=os.path.getmtime, reverse=True)
+
+        # todo przetestowac, jak to wyglada dla np miliona plikow txt wygenerowanych
+        # jesli wolno, to pomyslec
+        # przetestowac jeszcze dobrze, czy odciecie najnowszym plikiem dziala!!!!!!!!
+        # todo napisac do Doktora po 4 lipca odnosnie projektu
+        # dokumentacja
+        # dodac filty w glownym menu
+        # np szukanie po datach
+
+        last_processed = -1
+
+        for file_path, system_modification_time in files_with_dates:
             file_name = os.path.basename(file_path)
             print(file_name)
+            # system_modification_time = os.path.getmtime(file_path)
 
-            if with_last_file_limit and file_name == last_file:
+            if with_last_file_limit and last_file_mtime and system_modification_time < last_file_mtime:
                 break
 
-            if not last_file_saved:
-                last_file_saved = True
-                last_file = file_name
+            last_processed += 1
 
             if not db_connection.was_file_processed(file_name):
                 data = data_extractor.extract_data_from_file_class(file_path)
                 if data:
-                    db_connection.add_to_file_table_class(data, file_name)
+                    db_connection.add_to_file_table_class(data, file_name, system_modification_time)
                 else:
-                    db_connection.add_failed_file_to_db(file_name)
+                    db_connection.add_failed_file_to_db(file_name, system_modification_time)
+
+        if last_processed >= 0:
+            last_file_mtime = files_with_dates[0][1]
 
         if is_one_time or finish:
             return
