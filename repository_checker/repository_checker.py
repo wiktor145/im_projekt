@@ -9,17 +9,43 @@ from metadata_extractor import MetadataExtractor
 
 finish = False
 
+LAST_FILE_MTIME_FILE = "../last_file_mtime.txt"
+
 
 def signal_handler(sig, frame):
     global finish
     finish = True
 
 
+def load_last_file_mtime():
+    ret = None
+    if os.path.isfile(LAST_FILE_MTIME_FILE) :
+        with open(LAST_FILE_MTIME_FILE) as f:
+            s = f.read()
+            if s != "<DELETED>":
+                ret = float(f.read())
+    return ret
+
+
+def save_last_file_mtime(last_file_mtime):
+    with open(LAST_FILE_MTIME_FILE, "w") as f:
+        s = f.read()
+        if s != "<DELETED>":
+            f.write(last_file_mtime)
+
+
+def clear_last_file_time_fun():
+    with open(LAST_FILE_MTIME_FILE, "w") as f:
+        f.write("<DELETED>")
+
+
+
 def check_repository_for_new_files(db_connection, directory_path, data_extractor, check_time, is_one_time=False,
                                    with_last_file_limit=False):
-    last_file_mtime = None
 
     while True:
+        last_file_mtime = load_last_file_mtime()
+
         list_of_files = filter(os.path.isfile,
                                glob.glob(directory_path + '*'))
 
@@ -27,16 +53,6 @@ def check_repository_for_new_files(db_connection, directory_path, data_extractor
 
         files_with_dates.sort(key=lambda x: x[1], reverse=True)
 
-        # list_of_files = sorted(list_of_files,
-        #                        key=os.path.getmtime, reverse=True)
-
-        # todo przetestowac, jak to wyglada dla np miliona plikow txt wygenerowanych
-        # jesli wolno, to pomyslec
-        # przetestowac jeszcze dobrze, czy odciecie najnowszym plikiem dziala!!!!!!!!
-        # todo napisac do Doktora po 4 lipca odnosnie projektu
-        # dokumentacja
-        # dodac filty w glownym menu
-        # np szukanie po datach
 
         last_processed = -1
 
@@ -59,6 +75,7 @@ def check_repository_for_new_files(db_connection, directory_path, data_extractor
 
         if last_processed >= 0:
             last_file_mtime = files_with_dates[0][1]
+            save_last_file_mtime(last_file_mtime)
 
         if is_one_time or finish:
             return

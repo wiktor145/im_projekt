@@ -228,11 +228,20 @@ class MySqlDatabaseConnection:
         mycursor.execute(sql, val)
         return mycursor.lastrowid
 
-    def get_patients(self):
+    def get_patients(self, from_date=None, to_date=None):
         mycursor = self.db.cursor()
         mycursor.execute(
-            "SELECT patient_id, PatientID, PatientAge, PatientBirthDate, PatientName, " + \
-            "PatientSex FROM patients order by patient_id desc")
+            "SELECT patient_id, PatientID, PatientAge, PatientBirthDate, PatientName, "
+            "PatientSex FROM patients p where ( "
+            "(%s is null or exists (select 1 from files where file_id in "
+            "(select file_Id from images where series_Id in (select series_Id from series where study_Id in "
+            "(select study_id from studies where patient_Id = p.patient_id))) and system_modification_time >= %s)) "
+            "and "
+            "(%s is null or exists (select 1 from files where file_id in "
+            "(select file_Id from images where series_Id in (select series_Id from series where study_Id in "
+            "(select study_id from studies where patient_Id = p.patient_id))) and system_modification_time <= %s)) "
+            ") "
+            "order by patient_id desc", (from_date, from_date, to_date, to_date))
         myresult = mycursor.fetchall()
         patients_list = []
         for x in myresult:
@@ -286,6 +295,19 @@ class MySqlDatabaseConnection:
         mycursor.close()
         return images_list
 
+    def get_modality_for_series(self, series):
+        mycursor = self.db.cursor()
+        mycursor.execute(
+            "SELECT Modality "
+            "FROM images where series_id = %s and Modality is not null limit 1",
+            (series.series_id,))
+        myresult = mycursor.fetchall()
+        for x in myresult:
+            mycursor.close()
+            return str(x[0])
+        mycursor.close()
+        return ""
+
     def get_file_by_file_id(self, file_id):
         mycursor = self.db.cursor()
         mycursor.execute(
@@ -324,6 +346,17 @@ class MySqlDatabaseConnection:
             imagefiles.append(ImageFile(image, file, file_fields))
 
         return imagefiles
+
+    def clean_database(self):
+        mycursor = self.db.cursor()
+        mycursor.execute("delete from files_fields")
+        mycursor.execute("delete from images")
+        mycursor.execute("delete from files")
+        mycursor.execute("delete from series")
+        mycursor.execute("delete from studies")
+        mycursor.execute("delete from patients")
+        self.db.commit()
+        mycursor.close()
 
 
 # deprecated

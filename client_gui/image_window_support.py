@@ -64,6 +64,8 @@ def fill_fields():
     w.Text6.insert(1.0, imagefile.image.ImageType)
     w.Text7.insert(1.0, imagefile.image.PixelData)
     w.Scrolledtext1.insert(1.0, imagefile.file.comment if imagefile.file.comment else "")
+    w.Text8.insert(1.0, imagefile.file.system_modification_time)
+    w.Text9.insert(1.0, imagefile.image.Modality)
 
 
 def populate():
@@ -79,8 +81,8 @@ def destroy_window():
 
 
 def save_comment():
-    #print(imagefile.file.file_id)
-    #print(w.Scrolledtext1.get("1.0", END))
+    # print(imagefile.file.file_id)
+    # print(w.Scrolledtext1.get("1.0", END))
     connection.save_comment_for_file_id(imagefile.file.file_id, w.Scrolledtext1.get("1.0", END))  # ??????????????????
 
 

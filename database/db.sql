@@ -13,7 +13,7 @@ create table files (
    content VARCHAR(10000),
    comment VARCHAR(5000),
    PRIMARY KEY ( file_id )
-); --todo dorzucic pole z data utworzenia systemowego, zeby po tym mozna bylo szukac
+);
 
 -- todo dorzucic do gui glownego plrzysisk do wyczyszczenia calej bazy (danych - truncate)
 --todo z ekranem czy jestes pewien, ale na pewno ????

@@ -6,9 +6,10 @@
 #    Jun 17, 2021 07:06:13 PM CEST  platform: Windows NT
 
 import sys
-from tkinter import END
+from tkinter import END, messagebox
 
 import study_window
+from report_generator.report_generator import generate_for_object
 
 try:
     import Tkinter as tk
@@ -71,6 +72,14 @@ def fill_fields():
 def populate():
     fill_fields()
     fill_studies()
+
+
+def generate_report():
+    name = generate_for_object(patient, "patient_studies", len(studies_list), "report_patient")
+    if name:
+        messagebox.showinfo("Report generated successfully", "Generated report " + name)
+    else:
+        messagebox.showerror("Error", "Error during generating report")
 
 
 def destroy_window():

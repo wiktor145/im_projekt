@@ -7,11 +7,14 @@
 #    Jun 17, 2021 06:07:56 PM CEST  platform: Windows NT
 
 import sys
-from tkinter import END
+from tkinter import END, messagebox
+
+from tkcalendar import DateEntry
 
 import current_configuration
 import patient_window
 import edit_configuration
+from repository_checker.repository_checker import clear_last_file_time_fun
 
 try:
     import Tkinter as tk
@@ -27,6 +30,12 @@ except ImportError:
 
     py3 = True
 
+from_date_check = tk.BooleanVar()
+from_date_check.set(False)
+to_date_check = tk.BooleanVar()
+to_date_check.set(False)
+
+Custom = DateEntry
 
 def init(top, gui, db_connection, *args, **kwargs):
     global w, top_level, root, connection
@@ -50,7 +59,16 @@ def open_current_configuration():
 
 def refresh_patients():
     global patients_list
-    patients_list = connection.get_patients()
+
+    from_date, to_date = None, None
+
+    if from_date_check.get():
+        from_date = w.Custom1.get_date()
+
+    if to_date_check.get():
+        to_date = w.Custom2.get_date()
+
+    patients_list = connection.get_patients(from_date, to_date)
 
     inner_frame = w.Scrolledwindow1_f
     button = {}
@@ -72,12 +90,26 @@ def open_patient(i):
     patient_window.create_Toplevel1(root, connection, patients_list[i])
 
 
+def clear_database():
+    res = messagebox.askyesno("Clear Database",
+                              "Are you sure? This will clear WHOLE database and clear last checked file time.")
+    if res:
+        connection.clean_database()
+        refresh_patients()
+
+
+def clear_last_file_time():
+    res = messagebox.askyesno("Clear Last Checked File Time",
+                              "Are you sure? This will cause repository checker to check all files once again.")
+    if res:
+        clear_last_file_time_fun()
+
+
 def open_edit_configuration():
     edit_configuration.create_Toplevel1(root)
+
 
 if __name__ == '__main__':
     import dicom_repository
 
     dicom_repository.vp_start_gui()
-
-
