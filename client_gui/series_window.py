@@ -78,7 +78,7 @@ class Toplevel1:
         top.minsize(120, 1)
         top.maxsize(3844, 1061)
         top.resizable(1, 1)
-        top.title("New Toplevel")
+        top.title("Series")
         top.configure(background="#f2f2f2")
         top.configure(highlightbackground="#d9d9d9")
         top.configure(highlightcolor="black")

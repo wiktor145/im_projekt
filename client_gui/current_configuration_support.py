@@ -7,6 +7,8 @@
 import json
 import sys
 
+from other_classes.constants import CONFIGURATION_FILE
+
 try:
     import Tkinter as tk
 except ImportError:
@@ -28,7 +30,7 @@ def init(top, gui, *args, **kwargs):
     top_level = top
     root = top
 
-    f = open("../configuration.json", "r")
+    f = open(CONFIGURATION_FILE, "r")
     configuration = json.load(f)
     f.close()
 

@@ -9,6 +9,7 @@ import sys
 from tkinter import END
 
 from other_classes.configuration import Configuration
+from other_classes.constants import CONFIGURATION_FILE
 
 try:
     import Tkinter as tk
@@ -55,7 +56,7 @@ def init(top, gui, *args, **kwargs):
     w = gui
     top_level = top
     root = top
-    f = open("../configuration.json", "r")
+    f = open(CONFIGURATION_FILE, "r")
     configuration = json.load(f)
     f.close()
     populate_configuration()
@@ -88,7 +89,7 @@ def save():
     c = Configuration(tags)
     js = json.dumps(c.__dict__)
 
-    with open("../configuration.json", "w") as f:
+    with open(CONFIGURATION_FILE, "w") as f:
         f.write(str(js))
 
 

@@ -6,10 +6,9 @@ import signal
 
 from database.database_connection import MockDatabaseConnection, MySqlDatabaseConnection
 from metadata_extractor import MetadataExtractor
+from other_classes.constants import LAST_FILE_MTIME_FILE, DELETED_MARK, CONFIGURATION_FILE, DATA_DIRECTORY
 
 finish = False
-
-LAST_FILE_MTIME_FILE = "../last_file_mtime.txt"
 
 
 def signal_handler(sig, frame):
@@ -19,30 +18,26 @@ def signal_handler(sig, frame):
 
 def load_last_file_mtime():
     ret = None
-    if os.path.isfile(LAST_FILE_MTIME_FILE) :
+    if os.path.isfile(LAST_FILE_MTIME_FILE):
         with open(LAST_FILE_MTIME_FILE) as f:
             s = f.read()
-            if s != "<DELETED>":
-                ret = float(f.read())
+            if s != DELETED_MARK:
+                try:
+                    ret = float(f.read())
+                except:
+                    pass
     return ret
 
 
 def save_last_file_mtime(last_file_mtime):
     with open(LAST_FILE_MTIME_FILE, "w") as f:
-        s = f.read()
-        if s != "<DELETED>":
-            f.write(last_file_mtime)
-
-
-def clear_last_file_time_fun():
-    with open(LAST_FILE_MTIME_FILE, "w") as f:
-        f.write("<DELETED>")
-
+        s = f.read() if os.stat(LAST_FILE_MTIME_FILE).st_size != 0 else ""
+        if s != DELETED_MARK:
+            f.write(str(last_file_mtime))
 
 
 def check_repository_for_new_files(db_connection, directory_path, data_extractor, check_time, is_one_time=False,
                                    with_last_file_limit=False):
-
     while True:
         last_file_mtime = load_last_file_mtime()
 
@@ -52,7 +47,6 @@ def check_repository_for_new_files(db_connection, directory_path, data_extractor
         files_with_dates = [(x, os.path.getmtime(x)) for x in list_of_files]
 
         files_with_dates.sort(key=lambda x: x[1], reverse=True)
-
 
         last_processed = -1
 
@@ -88,13 +82,13 @@ if __name__ == '__main__':
     db_connection = MySqlDatabaseConnection()
     check_time = 60 * 1
 
-    f = open("../configuration.json", "r")
+    f = open(CONFIGURATION_FILE, "r")
     configuration = json.load(f)
     f.close()
 
     extractor = MetadataExtractor(configuration)
 
-    dir_path = "../data/"
+    dir_path = DATA_DIRECTORY
 
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)

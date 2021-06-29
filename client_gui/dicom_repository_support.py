@@ -14,7 +14,7 @@ from tkcalendar import DateEntry
 import current_configuration
 import patient_window
 import edit_configuration
-from repository_checker.repository_checker import clear_last_file_time_fun
+from other_classes.constants import LAST_FILE_MTIME_FILE, DELETED_MARK
 
 try:
     import Tkinter as tk
@@ -30,12 +30,14 @@ except ImportError:
 
     py3 = True
 
-from_date_check = tk.BooleanVar()
-from_date_check.set(False)
-to_date_check = tk.BooleanVar()
-to_date_check.set(False)
-
 Custom = DateEntry
+
+
+
+def clear_last_file_time_fun():
+    with open(LAST_FILE_MTIME_FILE, "w") as f:
+        f.write(DELETED_MARK)
+
 
 def init(top, gui, db_connection, *args, **kwargs):
     global w, top_level, root, connection
@@ -62,16 +64,19 @@ def refresh_patients():
 
     from_date, to_date = None, None
 
-    if from_date_check.get():
+    if w.from_date_check.get():
         from_date = w.Custom1.get_date()
 
-    if to_date_check.get():
+    if w.to_date_check.get():
         to_date = w.Custom2.get_date()
 
     patients_list = connection.get_patients(from_date, to_date)
 
     inner_frame = w.Scrolledwindow1_f
     button = {}
+    for widget in inner_frame.winfo_children():
+        widget.destroy()
+
     for i in range(len(patients_list)):
         e = tk.Entry(inner_frame, width=70, fg='blue')
         e.grid(row=i, column=1)
@@ -95,6 +100,7 @@ def clear_database():
                               "Are you sure? This will clear WHOLE database and clear last checked file time.")
     if res:
         connection.clean_database()
+        clear_last_file_time_fun()
         refresh_patients()
 
 

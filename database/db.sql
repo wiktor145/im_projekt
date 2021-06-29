@@ -15,9 +15,6 @@ create table files (
    PRIMARY KEY ( file_id )
 );
 
--- todo dorzucic do gui glownego plrzysisk do wyczyszczenia calej bazy (danych - truncate)
---todo z ekranem czy jestes pewien, ale na pewno ????
---todo zrobic jakis plik koniguracyjny z tym wszstkim
 
 create table files_fields(
     file_id INT,
@@ -73,5 +70,5 @@ create table images(
     PRIMARY KEY (image_id),
     FOREIGN KEY (series_id) REFERENCES series(series_id),
     FOREIGN KEY (file_id) REFERENCES files(file_id)
-); -- todo dodac modalnosc
+);
 

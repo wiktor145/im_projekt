@@ -176,9 +176,10 @@ class Toplevel1:
         self.Button4.configure(highlightcolor="black")
         self.Button4.configure(pady="0")
         self.Button4.configure(text='''Clear Database''')
+        self.Button4.configure(command=dicom_repository_support.clear_database)
 
         self.Button5 = tk.Button(top)
-        self.Button5.place(relx=0.053, rely=0.852, height=24, width=171)
+        self.Button5.place(relx=0.053, rely=0.852, height=24, width=185)
         self.Button5.configure(activebackground="#ececec")
         self.Button5.configure(activeforeground="#000000")
         self.Button5.configure(background="#d9d9d9")
@@ -189,6 +190,7 @@ class Toplevel1:
         self.Button5.configure(highlightcolor="black")
         self.Button5.configure(pady="0")
         self.Button5.configure(text='''Clear last checked file time''')
+        self.Button5.configure(command=dicom_repository_support.clear_last_file_time)
 
         self.Label3 = tk.Label(top)
         self.Label3.place(relx=0.107, rely=0.698, height=21, width=114)
@@ -212,6 +214,12 @@ class Toplevel1:
         self.Custom2.place(relx=0.44, rely=0.733, relheight=0.066
                            , relwidth=0.139)
 
+        self.from_date_check = tk.BooleanVar()
+        self.from_date_check.set(False)
+        self.to_date_check = tk.BooleanVar()
+        self.to_date_check.set(False)
+
+
         self.Checkbutton1 = tk.Checkbutton(top)
         self.Checkbutton1.place(relx=0.267, rely=0.75, relheight=0.043
                                 , relwidth=0.081)
@@ -224,7 +232,7 @@ class Toplevel1:
         self.Checkbutton1.configure(highlightcolor="black")
         self.Checkbutton1.configure(justify='left')
         self.Checkbutton1.configure(text='''Apply''')
-        self.Checkbutton1.configure(variable=dicom_repository_support.from_date_check)
+        self.Checkbutton1.configure(variable=self.from_date_check)
 
         self.Checkbutton2 = tk.Checkbutton(top)
         self.Checkbutton2.place(relx=0.587, rely=0.75, relheight=0.043
@@ -238,7 +246,7 @@ class Toplevel1:
         self.Checkbutton2.configure(highlightcolor="black")
         self.Checkbutton2.configure(justify='left')
         self.Checkbutton2.configure(text='''Apply''')
-        self.Checkbutton2.configure(variable=dicom_repository_support.to_date_check)
+        self.Checkbutton2.configure(variable=self.to_date_check)
 
 
 # The following code is added to facilitate the Scrolled widgets you specified.

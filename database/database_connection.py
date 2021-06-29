@@ -4,6 +4,7 @@ import time
 import traceback
 
 from database.db_classes import Patient, Study, Series, Image, File, ImageFile, FileField
+from other_classes.constants import *
 
 time.strftime('%Y-%m-%d %H:%M:%S')
 
@@ -15,10 +16,10 @@ class FieldNotFoundException(Exception):
 class MySqlDatabaseConnection:
     def __init__(self):
         self.db = mysql.connector.connect(
-            host="localhost",
-            user="imuser",
-            password="imuserpassword",
-            database="imdb"
+            host=host,
+            user=user,
+            password=password,
+            database=database
         )
 
         c = self.db.cursor()
@@ -26,7 +27,7 @@ class MySqlDatabaseConnection:
 
         self.processed_files = set()
         self.processed_files_cache_time = None
-        self.processed_files_cache_lifetime_seconds = 60
+        self.processed_files_cache_lifetime_seconds = processed_files_cache_lifetime_seconds
         self.get_processed_files_from_db()
 
     def was_file_processed(self, filename):
@@ -92,7 +93,8 @@ class MySqlDatabaseConnection:
         mycursor = self.db.cursor()
         sql = "INSERT INTO files (file_name, processed_date, was_successful, content, system_modification_time) " \
               + " VALUES (%s, %s, %s, %s, %s)"
-        val = (filename, processed_date, was_successful, str(content), system_modification_time)
+        val = (filename, processed_date, was_successful, str(content),
+               datetime.utcfromtimestamp(system_modification_time).strftime('%Y-%m-%d %H:%M:%S'))
         mycursor.execute(sql, val)
 
         self.db.commit()
@@ -147,7 +149,8 @@ class MySqlDatabaseConnection:
         sql = "INSERT INTO files (file_name, processed_date, was_successful, content, system_modification_time) " \
               + "VALUES (%s, %s, %s, %s, %s)"
         val = (
-            filename, processed_date, was_successful, str(parsed_file.extracted_fields_dict), system_modification_time)
+            filename, processed_date, was_successful, str(parsed_file.extracted_fields_dict),
+            datetime.utcfromtimestamp(system_modification_time).strftime('%Y-%m-%d %H:%M:%S'))
         mycursor.execute(sql, val)
         return mycursor.lastrowid
 
