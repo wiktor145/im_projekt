@@ -30,7 +30,7 @@ class Patient:
 
 class Study:
     def __init__(self, study_id, StudyInstanceUID, patient_id, StudyDate,
-                 StudyDescription, StudyID, StudyIDIssuer, StudyTime, ):
+                 StudyDescription, StudyID, StudyIDIssuer, StudyTime ):
         self.study_id = study_id
         self.StudyInstanceUID = StudyInstanceUID
         self.patient_id = patient_id

@@ -6,7 +6,7 @@ import signal
 
 from database.database_connection import MockDatabaseConnection, MySqlDatabaseConnection
 from metadata_extractor import MetadataExtractor
-from other_classes.constants import LAST_FILE_MTIME_FILE, DELETED_MARK, CONFIGURATION_FILE, DATA_DIRECTORY
+from other_classes.constants import LAST_FILE_MTIME_FILE, DELETED_MARK, CONFIGURATION_FILE, DATA_DIRECTORY, CHECK_TIME
 
 finish = False
 
@@ -80,7 +80,7 @@ def check_repository_for_new_files(db_connection, directory_path, data_extractor
 if __name__ == '__main__':
     # db_connection = MockDatabaseConnection()
     db_connection = MySqlDatabaseConnection()
-    check_time = 60 * 1
+    check_time = CHECK_TIME
 
     f = open(CONFIGURATION_FILE, "r")
     configuration = json.load(f)

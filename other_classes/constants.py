@@ -14,3 +14,5 @@ DELETED_MARK = "<DELETED>"
 REPORTS_DIRECTORY = "../reports/"
 
 DATA_DIRECTORY = "../data/"
+
+CHECK_TIME = 60 * 1
