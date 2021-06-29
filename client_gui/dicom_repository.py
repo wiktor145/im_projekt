@@ -140,7 +140,7 @@ class Toplevel1:
         self.Button1.configure(command=dicom_repository_support.refresh_patients)
 
         self.Button2 = tk.Button(top)
-        self.Button2.place(relx=0.747, rely=0.92, height=24, width=167)
+        self.Button2.place(relx=0.740, rely=0.92, height=24, width=190)
         self.Button2.configure(activebackground="#ececec")
         self.Button2.configure(activeforeground="#000000")
         self.Button2.configure(background="#d9d9d9")
