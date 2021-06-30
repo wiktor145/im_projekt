@@ -33,7 +33,6 @@ except ImportError:
 Custom = DateEntry
 
 
-
 def clear_last_file_time_fun():
     with open(LAST_FILE_MTIME_FILE, "w") as f:
         f.write(DELETED_MARK)

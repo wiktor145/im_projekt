@@ -219,7 +219,6 @@ class Toplevel1:
         self.to_date_check = tk.BooleanVar()
         self.to_date_check.set(False)
 
-
         self.Checkbutton1 = tk.Checkbutton(top)
         self.Checkbutton1.place(relx=0.267, rely=0.75, relheight=0.043
                                 , relwidth=0.081)

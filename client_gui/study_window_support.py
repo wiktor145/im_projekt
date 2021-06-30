@@ -83,6 +83,7 @@ def generate_report():
     else:
         messagebox.showerror("Error", "Error during generating report")
 
+
 def destroy_window():
     # Function which closes the window.
     global top_level

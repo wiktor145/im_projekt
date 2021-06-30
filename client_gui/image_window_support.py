@@ -83,7 +83,7 @@ def destroy_window():
 def save_comment():
     # print(imagefile.file.file_id)
     # print(w.Scrolledtext1.get("1.0", END))
-    connection.save_comment_for_file_id(imagefile.file.file_id, w.Scrolledtext1.get("1.0", END))  # ??????????????????
+    connection.save_comment_for_file_id(imagefile.file.file_id, w.Scrolledtext1.get("1.0", END))
 
 
 if __name__ == '__main__':

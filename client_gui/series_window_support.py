@@ -77,11 +77,12 @@ def populate():
 
 def generate_report():
     name = generate_for_object(series, "series_images", len(images_list), "report_series",
-                        {"Modality": connection.get_modality_for_series(series)})
+                               {"Modality": connection.get_modality_for_series(series)})
     if name:
         messagebox.showinfo("Report generated successfully", "Generated report " + name)
     else:
         messagebox.showerror("Error", "Error during generating report")
+
 
 def destroy_window():
     # Function which closes the window.

@@ -57,7 +57,7 @@ def get_configuration_by_gui():
 
     js = json.dumps(conf.__dict__)
 
-    with open("../configuration.json", "w+") as f:
+    with open("../../configuration.json", "w+") as f:
         f.write(str(js))
 
 

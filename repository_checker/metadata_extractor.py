@@ -6,7 +6,7 @@ from other_classes.parsed_file import ParsedFile
 class MetadataExtractor:
 
     def __init__(self, configuration):
-        #print(configuration)
+        # print(configuration)
         self.configuration = configuration
 
     def extract_fields(self, ds, fields_to_extract, file_name):
@@ -23,7 +23,7 @@ class MetadataExtractor:
         # print(file_name)
         # print(ds.dir())
         # print(ds['RadiationMode'])
-        #print(ds)
+        # print(ds)
         return ret
 
     def extract_data_from_file(self, file_name):

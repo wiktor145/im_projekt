@@ -50,7 +50,6 @@ def create_Toplevel1(rt, conn, series, *args, **kwargs):
     return (w, top)
 
 
-
 def destroy_Toplevel1():
     global w
     w.destroy()
