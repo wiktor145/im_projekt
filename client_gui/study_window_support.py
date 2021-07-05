@@ -77,7 +77,8 @@ def populate():
 
 
 def generate_report():
-    name = generate_for_object(study, "study_series", len(series_list), "report_study")
+    name = generate_for_object(study, "study_series", len(series_list), "report_study",
+                               {"PatientID": connection.get_PatientID_from_patient_id(study.patient_id)})
     if name:
         messagebox.showinfo("Report generated successfully", "Generated report " + name)
     else:

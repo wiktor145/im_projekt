@@ -10,6 +10,14 @@ def generate_for_object(obj1, count_field_name, field_count, filename_beginning,
         obj = obj1.__dict__
         obj[count_field_name] = field_count
 
+        fields_in_obj = list(obj.keys())
+
+        for f in fields_in_obj:
+            if "_id" in f:
+                temp = obj[f]
+                del obj[f]
+                obj["db_" + f] = temp
+
         if fields:
             for a in fields:
                 obj[a] = fields[a]

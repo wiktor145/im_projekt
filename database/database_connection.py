@@ -361,6 +361,39 @@ class MySqlDatabaseConnection:
         self.db.commit()
         mycursor.close()
 
+    def get_PatientID_from_patient_id(self, patient_id):
+        mycursor = self.db.cursor()
+        mycursor.execute(
+            "SELECT PatientID "
+            "FROM patients where patient_id = %s",
+            (patient_id,))
+        myresult = mycursor.fetchall()
+        ret = myresult[0][0]
+        mycursor.close()
+        return ret
+
+    def get_StudyInstanceUID_from_study_id(self, study_id):
+        mycursor = self.db.cursor()
+        mycursor.execute(
+            "SELECT StudyInstanceUID "
+            "FROM studies where study_id = %s",
+            (study_id,))
+        myresult = mycursor.fetchall()
+        ret = myresult[0][0]
+        mycursor.close()
+        return ret
+
+    def get_patient_fields_from_study_id(self, study_id):
+        mycursor = self.db.cursor()
+        mycursor.execute(
+            "SELECT patient_id, PatientID "
+            "FROM patients where patient_id = (select patient_id from studies where study_Id = %s)",
+            (study_id,))
+        myresult = mycursor.fetchall()
+        ret = myresult[0]
+        mycursor.close()
+        return ret[0], ret[1]
+
 
 # deprecated
 class MockDatabaseConnection:

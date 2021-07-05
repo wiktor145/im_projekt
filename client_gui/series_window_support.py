@@ -76,8 +76,13 @@ def populate():
 
 
 def generate_report():
+    patient_fields = connection.get_patient_fields_from_study_id(series.study_id)
+
     name = generate_for_object(series, "series_images", len(images_list), "report_series",
-                               {"Modality": connection.get_modality_for_series(series)})
+                               {"Modality": connection.get_modality_for_series(series),
+                                "StudyInstanceUID": connection.get_StudyInstanceUID_from_study_id(series.study_id),
+                                "patient_id": patient_fields[0], "PatientID": patient_fields[1]
+                                })
     if name:
         messagebox.showinfo("Report generated successfully", "Generated report " + name)
     else:
