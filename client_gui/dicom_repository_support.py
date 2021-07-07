@@ -77,12 +77,16 @@ def refresh_patients():
         widget.destroy()
 
     for i in range(len(patients_list)):
-        e = tk.Entry(inner_frame, width=70, fg='blue')
+        e = tk.Entry(inner_frame, width=35, fg='blue')
         e.grid(row=i, column=1)
         e.insert(END, patients_list[i].PatientID)
 
+        e = tk.Entry(inner_frame, width=35, fg='blue')
+        e.grid(row=i, column=2)
+        e.insert(END, patients_list[i].PatientName)
+
         button[i] = tk.Button(inner_frame, text='Open', width=9, command=lambda i=i: open_patient(i))
-        button[i].grid(row=i, column=2, sticky='w')
+        button[i].grid(row=i, column=3, sticky='w')
     if button:
         button[0].wait_visibility()
     bbox = inner_frame.bbox()

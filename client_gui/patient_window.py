@@ -152,7 +152,7 @@ class Toplevel1:
         self.Label6.configure(highlightbackground="#d9d9d9")
         self.Label6.configure(highlightcolor="black")
         self.Label6.configure(relief="ridge")
-        self.Label6.configure(text='''PatientName''')
+        self.Label6.configure(text='''PatientSex''')
 
         self.Label7 = tk.Label(top)
         self.Label7.place(relx=0.03, rely=0.4, height=21, width=120)
@@ -164,7 +164,7 @@ class Toplevel1:
         self.Label7.configure(highlightbackground="#d9d9d9")
         self.Label7.configure(highlightcolor="black")
         self.Label7.configure(relief="ridge")
-        self.Label7.configure(text='''PatientSex''')
+        self.Label7.configure(text='''PatientName''')
 
         self.Text1 = tk.Text(top)
         self.Text1.place(relx=0.237, rely=0.109, relheight=0.044, relwidth=0.538)
