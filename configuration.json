@@ -24,7 +24,8 @@
   ],
   "image_fields": [
     "ImageType",
-    "PixelData"
+    "PixelData",
+    "Modality"
   ],
   "fields_to_extract": [
     "PatientName",
