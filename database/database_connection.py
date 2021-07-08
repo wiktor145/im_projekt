@@ -25,6 +25,9 @@ class MySqlDatabaseConnection:
         c = self.db.cursor()
         c.execute("""set session transaction isolation level READ COMMITTED""")
 
+        # c.execute("SET NAMES 'utf8'")
+        # c.execute("SET CHARACTER SET utf8")
+
         self.processed_files = set()
         self.processed_files_cache_time = None
         self.processed_files_cache_lifetime_seconds = processed_files_cache_lifetime_seconds
@@ -352,12 +355,14 @@ class MySqlDatabaseConnection:
 
     def clean_database(self):
         mycursor = self.db.cursor()
-        mycursor.execute("delete from files_fields")
-        mycursor.execute("delete from images")
-        mycursor.execute("delete from files")
-        mycursor.execute("delete from series")
-        mycursor.execute("delete from studies")
-        mycursor.execute("delete from patients")
+        mycursor.execute("SET FOREIGN_KEY_CHECKS = 0")
+        mycursor.execute("truncate table files_fields")
+        mycursor.execute("truncate table images")
+        mycursor.execute("truncate table files")
+        mycursor.execute("truncate table series")
+        mycursor.execute("truncate table studies")
+        mycursor.execute("truncate table patients")
+        mycursor.execute("SET FOREIGN_KEY_CHECKS = 1")
         self.db.commit()
         mycursor.close()
 
