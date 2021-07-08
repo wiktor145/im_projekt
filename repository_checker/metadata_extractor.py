@@ -17,7 +17,7 @@ class MetadataExtractor:
                 # print(field, ds.dir())
                 # print(ds[field])
                 try:
-                    ret[field] = ds[field]
+                    ret[field] = ds[field].value if field != "PixelData" else ds[field]
                 except:
                     print("Error during getting field", field, "in file", file_name)
         # print(file_name)
