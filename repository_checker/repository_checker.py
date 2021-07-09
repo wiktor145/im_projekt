@@ -52,7 +52,7 @@ def check_repository_for_new_files(db_connection, directory_path, data_extractor
 
         for file_path, system_modification_time in files_with_dates:
             file_name = os.path.basename(file_path)
-            print(file_name)
+            # print(file_name)
             # system_modification_time = os.path.getmtime(file_path)
 
             if with_last_file_limit and last_file_mtime and system_modification_time < last_file_mtime:
