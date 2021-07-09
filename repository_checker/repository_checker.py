@@ -23,7 +23,7 @@ def load_last_file_mtime():
             s = f.read()
             if s != DELETED_MARK:
                 try:
-                    ret = float(f.read())
+                    ret = float(s)
                 except:
                     pass
     return ret
@@ -37,7 +37,7 @@ def save_last_file_mtime(last_file_mtime):
 
 
 def check_repository_for_new_files(db_connection, directory_path, data_extractor, check_time, is_one_time=False,
-                                   with_last_file_limit=False):
+                                   with_last_file_limit=True):
     while True:
         last_file_mtime = load_last_file_mtime()
 
